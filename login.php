@@ -1,3 +1,8 @@
+<?php
+session_start();
+require 'koneksi.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,21 +40,8 @@
             <button type="submit" class="btn btn-primary">Sign In</button>
         </form>
 
-        <div class="remember-container">
-            <label class="remember-me">
-                <input type="checkbox" id="rememberMe">
-                <label for="rememberMe">Remember me</label>
-            </label>
-
-            <a href="#">Need Help?</a>
-        </div>
-
         <hr class="divider">
-
-        <button type="button" class="btn btn-outline-primary ">
-            <i class="bi bi-google"></i> Login with Google
-        </button>
-
+     
         <div class="register">
             <p>New in Movix? <a href="register.html">Register</a></p>
         </div>
