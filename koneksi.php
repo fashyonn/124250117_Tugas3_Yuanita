@@ -6,7 +6,7 @@ $database = 'bioskop';
 
 $koneksi = mysqli_connect($hostname, $username, $password, $database);
 
-if($koneksi->connect_error){
-    die('Koneksi Gagal');
+if(!$koneksi){
+    die('Koneksi Gagal'. mysqli_connect_error());
 }
 ?>

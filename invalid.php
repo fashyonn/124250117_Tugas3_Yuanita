@@ -4,26 +4,19 @@ require 'koneksi.php';
 
 $user = $_POST["username"];
 $password = $_POST["password"];
-$query = mysqli_query($koneksi, "SELECT * FROM users WHERE user = '$user'");
+$query = mysqli_query($koneksi, "SELECT * FROM users WHERE username = '$user'");
 $data = mysqli_fetch_array($query);
-$kondisi = false;
+$status = "";
 
 if ($data) {
     if ($password == $data['password']) {
-        echo "<script>window.location.href = 'dashboard.php';</script>";
+        header('location: dashboard.php');
         exit();
     } else {
-        function pass()
-        {
-            echo "Password salah!";
-            $kondisi = true;
-        }
+        $status = "password_salah";
     }
 } else {
-    function reg()
-    {
-        echo "Anda belum Registrasi!";
-    }
+    $status = "belum_registrasi";
 }
 ?>
 
@@ -49,15 +42,15 @@ if ($data) {
 <body>
     <div class="card p-2 rounded-4" style="width: 30rem;">
         <div class="card-body">
-            <?php if (!$kondisi) { ?>
-                <h5 class="card-title text-center"><?= pass() ?></h5>
+            <?php if ($status == "password_salah") : ?>
+                <h5 class="card-title text-center">Password Salah!</h5>
                 <p class="card-text">Password yang Anda masukan salah! Silahkan coba login ulang kembali!</p>
                 <a href="login.php" class="btn btn-primary mt-0">Login ulang</a>
-            <?php } else { ?>
-                <h5 class="card-title text-center"><?= reg() ?></h5>
+            <?php elseif ($status == "belum_registrasi") : ?>
+                <h5 class="card-title text-center">Anda Belum Registrasi!</h5>
                 <p class="card-text">Anda belum memiliki akun! Silahkan melakukan registrasi terlebih dahulu!</p>
                 <a href="registrasi.php" class="btn btn-primary mt-0">Registrasi</a>
-            <?php } ?>
+            <?php endif; ?>
         </div>
     </div>
 </body>

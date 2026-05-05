@@ -1,6 +1,5 @@
 <?php
 session_start();
-require 'koneksi.php';
 ?>
 
 <!DOCTYPE html>
@@ -26,15 +25,15 @@ require 'koneksi.php';
     <div class="form-container">
         <div class="title">
             <h1>Login</h1>
-            <p>Enter your email and password to continue</p>
+            <p>Enter your username and password to continue</p>
         </div>
         <form action="invalid.php" method="post">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingUsername" placeholder="Username" name="username">
+                <input type="text" class="form-control" id="floatingUsername" placeholder="Username" name="username" required>
                 <label for="floatingUsername">Username</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
                 <label for="floatingPassword">Password</label>
             </div>
             <button type="submit" class="btn btn-primary">Sign In</button>
