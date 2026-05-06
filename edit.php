@@ -107,7 +107,7 @@ $data = mysqli_fetch_assoc($query);
                             </td>
                             <td>
                                 <select class="form-select border-0 bg-transparent text-white" id="judul" name="judul" required>
-                                    <option value="<?= $data['FilmID'] ?>" selected disabled><?= $data['judul'] ?></option>
+                                    <option value="<?= $data['FilmID'] ?>" selected><?= $data['judul'] ?></option>
                                     <option value="1">Goat</option>
                                     <option value="2">Sore: Istri dari Masa Depan</option>
                                     <option value="3">Five Night at Freddy's 2</option>
