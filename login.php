@@ -27,7 +27,7 @@ session_start();
             <h1>Login</h1>
             <p>Enter your username and password to continue</p>
         </div>
-        <form action="invalid.php" method="post">
+        <form action="invalid.php?id=1" method="post">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="floatingUsername" placeholder="Username" name="username" required>
                 <label for="floatingUsername">Username</label>

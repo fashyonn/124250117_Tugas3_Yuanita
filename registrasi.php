@@ -24,7 +24,7 @@
             <p>Enter your username, email, and password to continue</p>
         </div>
         
-        <form action="prosesReg.php" method="post">
+        <form action="invalid.php?id=2" method="post">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="floatingUsername" placeholder="Username" name="username" required>
                 <label for="floatingUsername">Username</label>

@@ -2,23 +2,40 @@
 session_start();
 require 'koneksi.php';
 
-$user = $_POST["username"];
-$password = $_POST["password"];
-$query = mysqli_query($koneksi, "SELECT * FROM users WHERE username = '$user'");
-$data = mysqli_fetch_array($query);
-$status = "";
+$id = $_GET['id'];
 
-if ($data) {
-    if ($password == $data['password']) {
-        $_SESSION['user_id']  = $data['UserID'];
-        $_SESSION['username'] = $data['username'];
-        header('location: dashboard.php');
-        exit();
+if ($id == 1) {
+    $user = $_POST["username"];
+    $password = $_POST["password"];
+    $query = mysqli_query($koneksi, "SELECT * FROM users WHERE username = '$user'");
+    $data = mysqli_fetch_array($query);
+    $status = "";
+
+    if ($data) {
+        if ($password == $data['password']) {
+            $_SESSION['user_id'] = $data['UserID'];
+            $_SESSION['username'] = $data['username'];
+            header('location: dashboard.php');
+            exit();
+        } else {
+            $status = "password_salah";
+        }
     } else {
-        $status = "password_salah";
+        $status = "belum_registrasi";
     }
 } else {
-    $status = "belum_registrasi";
+    $username = $_POST["username"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
+
+    if (mysqli_query($koneksi, $sql)) {
+        header('location: login.php');
+        exit;
+    } else {
+        header("Location: registrasi.php");
+    }
 }
 ?>
 
@@ -44,11 +61,11 @@ if ($data) {
 <body>
     <div class="card p-2 rounded-4" style="width: 30rem;">
         <div class="card-body">
-            <?php if ($status == "password_salah") : ?>
+            <?php if ($status == "password_salah"): ?>
                 <h5 class="card-title text-center">Password Salah!</h5>
                 <p class="card-text">Password yang Anda masukan salah! Silahkan coba login ulang kembali!</p>
                 <a href="login.php" class="btn btn-primary mt-0">Login ulang</a>
-            <?php elseif ($status == "belum_registrasi") : ?>
+            <?php elseif ($status == "belum_registrasi"): ?>
                 <h5 class="card-title text-center">Anda Belum Registrasi!</h5>
                 <p class="card-text">Anda belum memiliki akun! Silahkan melakukan registrasi terlebih dahulu!</p>
                 <a href="registrasi.php" class="btn btn-primary mt-0">Registrasi</a>
