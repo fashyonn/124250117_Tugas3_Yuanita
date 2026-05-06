@@ -35,10 +35,30 @@ $user = $_SESSION['username'];
     <nav class="navbar fixed-top" style="background-color: #8E1616;">
         <div class="container-fluid">
             <a class="navbar-brand text-white fw-semibold" href="dashboard.php">Movie</a>
-            <a class="navbar-brand float-end text-white fw-semibold" href="#">
-                <i class="d-inline-block align-text-top bi bi-person-circle"></i>
-                <?= $user ?>
-            </a>
+
+            <div class="dropdown">
+                <a class="navbar-brand float-end text-white fw-semibold dropdown-toggle" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="d-inline-block align-text-top bi bi-person-circle"></i>
+                    <?= $user ?>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li>
+                        <a class="dropdown-item" href="invoice.php">
+                            <i class="bi bi-ticket-perforated me-2"></i>Tiket yang Dipesan
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="logout.php">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container mt-5">
@@ -114,4 +134,5 @@ $user = $_SESSION['username'];
         </div>
     </div>
 </body>
+
 </html>

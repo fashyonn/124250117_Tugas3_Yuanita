@@ -2,14 +2,21 @@
 session_start();
 require 'koneksi.php';
 
-$userid = $_SESSION['UserID'];
+$userid = $_SESSION['user_id'];
 $user = $_SESSION['username'];
 $id_pesanan = $_GET['id'];
+
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $id_target = mysqli_real_escape_string($koneksi, $id_pesanan);
+    $kondisi = "p.PesanID = '$id_target' AND p.UserID = '$userid'";
+} else {
+   $kondisi = "p.UserID = '$userid' ORDER BY p.PesanID DESC LIMIT 1";
+}
 
 $sql = "SELECT p.*, d.judul, d.harga 
         FROM pemesan p
         JOIN daftarfilm d ON p.FilmID = d.FilmID 
-        WHERE p.PesanID = '$id_pesanan' AND p.UserID = '$userid'";
+        WHERE $kondisi";
 
 $query = mysqli_query($koneksi, $sql);
 $data = mysqli_fetch_assoc($query);
@@ -44,15 +51,35 @@ $total = $data['harga'] * $data['jumlah'];
     <nav class="navbar fixed-top" style="background-color: #8E1616;">
         <div class="container-fluid">
             <a class="navbar-brand text-white fw-semibold" href="dashboard.php">Movie</a>
-            <a class="navbar-brand float-end text-white fw-semibold" href="#">
-                <i class="d-inline-block align-text-top bi bi-person-circle"></i>
-                <?= $user ?>
-            </a>
+
+            <div class="dropdown">
+                <a class="navbar-brand float-end text-white fw-semibold dropdown-toggle" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="d-inline-block align-text-top bi bi-person-circle"></i>
+                    <?= $user ?>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li>
+                        <a class="dropdown-item" href="invoice.php">
+                            <i class="bi bi-ticket-perforated me-2"></i>Tiket yang Dipesan
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="logout.php">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <div class="card mt-5 border-0">
-        <div class="card-header text-white fw-semibold fs-3" style="background-color: #8E1616; width: 70rem;">
+    <div class="card mt-5 border-0 mx-auto">
+        <div class="card-header text-white fw-semibold fs-3" style="background-color: #8E1616; width: 50rem;">
             Invoice Pemesanan Tiket
         </div>
         <div class="card-body" style="background-color: #3A2A2A;">
@@ -62,13 +89,37 @@ $total = $data['harga'] * $data['jumlah'];
                         <td>Nama</td>
                         <td><?= $data['nama'] ?></td>
                     </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><?= $data['email'] ?></td>
+                    </tr>
+                    <tr>
+                        <td>Film</td>
+                        <td><?= $data['judul'] ?></td>
+                    </tr>
+                    <tr>
+                        <td>Kursi</td>
+                        <td><?= $data['kursi'] ?></td>
+                    </tr>
+                    <tr>
+                        <td>Metode Pembayaran</td>
+                        <td><?= $data['pembayaran'] ?></td>
+                    </tr>
+                    <tr>
+                        <td>Harga per tiket</td>
+                        <td>Rp<?= number_format($data['harga'], 0, ',', '.'); ?></td>
+                    </tr>
                     <tr class="table-danger">
                         <th>Total Bayar</th>
                         <th>Rp<?= number_format($total, 0, ',', '.'); ?></th>
                     </tr>
                 </tbody>
             </table>
-            <a href="formPesan.php" class="btn btn-primary mt-0">Pesan Lagi</a>
+
+            <a href="formPesan.php" class="fw-normal btn btn-dash float-end">Batalkan Pesanan</a>
+            <a href="formPesan.php" class="fw-normal btn btn-dash float-end me-2">Edit Pesanan</a>
+
+            <a href="formPesan.php" class="btn btn-primary mt-3">Pesan Lagi</a>
         </div>
     </div>
 </body>
