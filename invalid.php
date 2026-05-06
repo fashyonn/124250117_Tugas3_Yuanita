@@ -10,6 +10,8 @@ $status = "";
 
 if ($data) {
     if ($password == $data['password']) {
+        $_SESSION['user_id']  = $data['UserID'];
+        $_SESSION['username'] = $data['username'];
         header('location: dashboard.php');
         exit();
     } else {

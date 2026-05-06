@@ -1,61 +1,16 @@
 <?php
-$daftarFilm = [
-    [
-        "img" => "image/GOAT.jpg",
-        "judul" => "Goat",
-        "genre" => "Animasi / Komedi / Keluarga / Olahraga",
-        "durasi" => "± 100",
-        "jadwal" => "Tayang puku 14.30 WIB",
-        "sinopsis" => 'Kisah Will, seekor kambing kecil dengan mimpi besar menjadi pemain
-                        profesional "roarball" — olahraga penuh aksi di dunia binatang antropomorfik —
-                        yang harus membuktikan dirinya di tengah rintangan dan penolakan.',
-        "harga" => "Rp 80.000"
-    ],
-    [
-        "img" => "image/Sore.jpg",
-        "judul" => "Sore: Istri dari Masa Depan",
-        "genre" => "Romantis / Drama / Fantasi",
-        "durasi" => "± 105",
-        "jadwal" => "Tayang pukul 19.00 WIB",
-        "sinopsis" => "Seorang wanita misterius datang dari masa depan dan mengaku                        sebagai istri seorang pria yang hidupnya berantakan. Ia berusaha mengubah takdir
-                        dengan memperbaiki kebiasaan dan pilihan hidup sang pria sebelum semuanya
-                        terlambat.",
-        "harga" => "Rp 65.000"
-    ],
-    [
-        "img" => "image/FNF.jpg",
-        "judul" => "Five Night at Freddy's 2",
-        "genre" => "Horor / Thriller",
-        "durasi" => "± 110",
-        "jadwal" => "Tayang pukul 21.00 WIB",
-        "sinopsis" => "Teror animatronik kembali menghantui penjaga malam dengan
-                        misteri yang lebih gelap dan mematikan. Sekuel ini menghadirkan ketegangan lebih
-                        intens dari film pertamanya.",
-        "harga" => "Rp 70.000"
-    ],
-    [
-        "img" => "image/Jumbo.jpg",
-        "judul" => "Jumbo",
-        "genre" => "Animasi / Keluarga / Petualangan",
-        "durasi" => "± 102",
-        "jadwal" => "Tayang pukul 11.00 WIB",
-        "sinopsis" => "Don, anak bertubuh besar yang sering diremehkan, ingin
-                        membuktikan kemampuannya melalui pertunjukan bakat. Film ini menyuguhkan cerita
-                        hangat tentang kepercayaan diri dan persahabatan.",
-        "harga" => "Rp 60.000"
-    ],
-    [
-        "img" => "image/R&C.jpg",
-        "judul" => "Rangga & Cinta",
-        "genre" => "Romantis / Musikal / Remaja",
-        "durasi" => "± 119",
-        "jadwal" => "Tayang pukul 15.45 WIB",
-        "sinopsis" => "Versi musikal dari kisah cinta legendaris remaja SMA yang penuh
-                        puisi dan konflik perasaan. Nostalgia dipadukan dengan arasemen musik modern.",
-        "harga" => "Rp 70.000"
-    ]
-]
-    ?>
+session_start();
+require 'koneksi.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user = $_SESSION['username'];
+
+$query = mysqli_query($koneksi, "SELECT * FROM daftarfilm");
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +38,7 @@ $daftarFilm = [
                 <a class="navbar-brand text-white fw-semibold" href="dashboard.php">Movie</a>
                 <a class="navbar-brand float-end text-white fw-semibold" href="#">
                     <i class="d-inline-block align-text-top bi bi-person-circle"></i>
-                    Yuanita
+                    <?= $user ?>
                 </a>
             </div>
         </nav>
@@ -101,26 +56,24 @@ $daftarFilm = [
             <div class="container">
                 <div class="row">
 
-                    <?php
-                    for ($i = 0; $i < count($daftarFilm); $i++): ?>
-                        <div class="col-md-6 mb-4">
-                            <div class="box row g-0 border border-secondary rounded overflow-hidden">
-                                <div class="col-5">
-                                    <img src=<?= $daftarFilm[$i]["img"] ?> alt="">
-                                </div>
-                                <div class="col-7">
-                                    <div class="movie-info">
-                                        <h2><?= $daftarFilm[$i]["judul"] ?></h2>
-                                        <div class="genre"><?= $daftarFilm[$i]["genre"] ?></div>
-                                        <div class="duration"><?= $daftarFilm[$i]["durasi"] ?></div>
-                                        <div class="schedule"><?= $daftarFilm[$i]["jadwal"] ?></div>
-                                        <p class="synopsis"><?= $daftarFilm[$i]["sinopsis"] ?></p>
-                                        <div class="price"><?= $daftarFilm[$i]["harga"] ?></div>
-                                    </div>
+                    <?php while($data = mysqli_fetch_array($query)) ?>
+                    <div class="col-md-6 mb-4">
+                        <div class="box row g-0 border border-secondary rounded overflow-hidden">
+                            <div class="col-5">
+                                <img src="image/<?= $data["img"] ?>" alt="">
+                            </div>
+                            <div class="col-7">
+                                <div class="movie-info">
+                                    <h2><?= $data["judul"] ?></h2>
+                                    <div class="genre"><?= $data["genre"] ?></div>
+                                    <div class="duration"><?= $data["durasi"] ?></div>
+                                    <div class="schedule"><?= $data["jadwal"] ?></div>
+                                    <p class="synopsis"><?= $data["sinopsis"] ?></p>
+                                    <div class="price"><?= $data["harga"] ?></div>
                                 </div>
                             </div>
                         </div>
-                    <?php endfor; ?>
+                    </div>
 
                     <a href="formPesan.php"><button class="btn-dash">Pesan Sekarang</button></a>
 
