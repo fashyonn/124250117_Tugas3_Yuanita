@@ -2,6 +2,12 @@
 session_start();
 require 'koneksi.php';
 
+$id = mysqli_query($koneksi, "SELECT * FROM pemesan");
+
+if ($id) {
+    $last_id = mysqli_insert_id($koneksi);
+}
+
 $userid = $_SESSION['user_id'];
 $user = $_SESSION['username'];
 $id_pesanan = $_GET['id'];
@@ -13,8 +19,7 @@ if (isset($_POST['id_pesanan'])) {
     $jumlah = $_POST['jumlah'];
     $kursi = $_POST['kursi'];
 
-    $sql_update = "UPDATE pemesan
-        SET
+    $sql_update = "UPDATE pemesan SET
         nama = '$nama',
         email = '$email',
         FilmID = '$film',
@@ -24,7 +29,7 @@ if (isset($_POST['id_pesanan'])) {
 
     $update_query = mysqli_query($koneksi, $sql_update);
     if ($update_query) {
-        header("Location: invoice.php?id=$id_upd&status=updated");
+        header("Location: invoice.php?id=$id_pesanan");
         exit();
     } else {
         die("Gagal update data: " . mysqli_error($koneksi));
@@ -86,7 +91,7 @@ $total = $data['harga'] * $data['jumlah'];
 
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                     <li>
-                        <a class="dropdown-item" href="invoice.php">
+                        <a class="dropdown-item" href="invoice.php?id=<?= $last_id ?>">
                             <i class="bi bi-ticket-perforated me-2"></i>Tiket yang Dipesan
                         </a>
                     </li>
@@ -111,51 +116,35 @@ $total = $data['harga'] * $data['jumlah'];
             <table class="table">
                 <tbody>
                     <tr>
-                        <td>
-                            Nama</td>
-
+                        <td>Nama</td>
                         <td><?= $data['nama'] ?></td>
                     </tr>
                     <tr>
-                        <td>
-                            Email</td>
-
+                        <td>Email</td>
                         <td><?= $data['email'] ?></td>
                     </tr>
                     <tr>
-                        <td>
-                            Film</td>
-
+                        <td>Film</td>
                         <td><?= $data['judul'] ?></td>
                     </tr>
                     <tr>
-                        <td>
-                            Jumlah Tiket</td>
-
+                        <td>Jumlah Tiket</td>
                         <td><?= $data['jumlah'] ?></td>
                     </tr>
                     <tr>
-                        <td>
-                            Kursi</td>
-
+                        <td>Kursi</td>
                         <td><?= $data['kursi'] ?></td>
                     </tr>
                     <tr>
-                        <td>
-                            Metode Pembayaran</td>
-
+                        <td>Metode Pembayaran</td>
                         <td><?= $data['pembayaran'] ?></td>
                     </tr>
                     <tr>
-                        <td>Ha
-                            rga per tiket</td>
-
+                        <td>Harga per tiket</td>
                         <td>Rp<?= number_format($data['harga'], 0, ',', '.'); ?></td>
                     </tr>
                     <tr class="table-danger">
-                        <th>To
-                            tal Bayar</th>
-
+                        <th>Total Bayar</th>
                         <th>Rp<?= number_format($total, 0, ',', '.'); ?></th>
                     </tr>
                 </tbody>

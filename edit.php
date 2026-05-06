@@ -7,6 +7,12 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+$id = mysqli_query($koneksi, "SELECT * FROM pemesan");
+
+if ($id) {
+    $last_id = mysqli_insert_id($koneksi);
+}
+
 $id_pesanan = $_GET['id'];
 $user = $_SESSION['username'];
 
@@ -51,7 +57,7 @@ $data = mysqli_fetch_assoc($query);
 
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                     <li>
-                        <a class="dropdown-item" href="invoice.php">
+                        <a class="dropdown-item" href="invoice.php?id=<?= $last_id ?>">
                             <i class="bi bi-ticket-perforated me-2"></i>Tiket yang Dipesan
                         </a>
                     </li>
