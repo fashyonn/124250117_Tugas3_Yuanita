@@ -6,11 +6,35 @@ $userid = $_SESSION['user_id'];
 $user = $_SESSION['username'];
 $id_pesanan = $_GET['id'];
 
+if (isset($_POST['id_pesanan'])) {
+    $nama = $_POST['nama'];
+    $email = $_POST['email'];
+    $film = $_POST['judul'];
+    $jumlah = $_POST['jumlah'];
+    $kursi = $_POST['kursi'];
+
+    $sql_update = "UPDATE pemesan
+        SET
+        nama = '$nama',
+        email = '$email',
+        FilmID = '$film',
+        jumlah = '$jumlah',
+        kursi = '$kursi'
+        WHERE PesanID = $id_pesanan";
+
+    $update_query = mysqli_query($koneksi, $sql_update);
+    if ($update_query) {
+        header("Location: invoice.php?id=$id_upd&status=updated");
+        exit();
+    } else {
+        die("Gagal update data: " . mysqli_error($koneksi));
+    }
+}
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id_target = mysqli_real_escape_string($koneksi, $id_pesanan);
     $kondisi = "p.PesanID = '$id_target' AND p.UserID = '$userid'";
 } else {
-   $kondisi = "p.UserID = '$userid' ORDER BY p.PesanID DESC LIMIT 1";
+    $kondisi = "p.UserID = '$userid' ORDER BY p.PesanID DESC LIMIT 1";
 }
 
 $sql = "SELECT p.*, d.judul, d.harga 
@@ -22,7 +46,8 @@ $query = mysqli_query($koneksi, $sql);
 $data = mysqli_fetch_assoc($query);
 
 if (!$data) {
-    die("Tiket tidak ditemukan atau kamu tidak berhak melihat tiket ini!");
+    echo "<script>alert('Data tidak ditemukan!'); window.location='dashboard.php';</script>";
+    exit();
 }
 
 $total = $data['harga'] * $data['jumlah'];
@@ -78,46 +103,66 @@ $total = $data['harga'] * $data['jumlah'];
         </div>
     </nav>
 
-    <div class="card mt-5 border-0 mx-auto">
-        <div class="card-header text-white fw-semibold fs-3" style="background-color: #8E1616; width: 50rem;">
+    <div class="card mb-4 border-0 mx-auto" style="margin-top: 80px !important;">
+        <div class="card-header text-white fw-semibold fs-3" style="background-color: #8E1616; width: 70rem;">
             Invoice Pemesanan Tiket
         </div>
         <div class="card-body" style="background-color: #3A2A2A;">
             <table class="table">
                 <tbody>
                     <tr>
-                        <td>Nama</td>
+                        <td>
+                            Nama</td>
+
                         <td><?= $data['nama'] ?></td>
                     </tr>
                     <tr>
-                        <td>Email</td>
+                        <td>
+                            Email</td>
+
                         <td><?= $data['email'] ?></td>
                     </tr>
                     <tr>
-                        <td>Film</td>
+                        <td>
+                            Film</td>
+
                         <td><?= $data['judul'] ?></td>
                     </tr>
                     <tr>
-                        <td>Kursi</td>
+                        <td>
+                            Jumlah Tiket</td>
+
+                        <td><?= $data['jumlah'] ?></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Kursi</td>
+
                         <td><?= $data['kursi'] ?></td>
                     </tr>
                     <tr>
-                        <td>Metode Pembayaran</td>
+                        <td>
+                            Metode Pembayaran</td>
+
                         <td><?= $data['pembayaran'] ?></td>
                     </tr>
                     <tr>
-                        <td>Harga per tiket</td>
+                        <td>Ha
+                            rga per tiket</td>
+
                         <td>Rp<?= number_format($data['harga'], 0, ',', '.'); ?></td>
                     </tr>
                     <tr class="table-danger">
-                        <th>Total Bayar</th>
+                        <th>To
+                            tal Bayar</th>
+
                         <th>Rp<?= number_format($total, 0, ',', '.'); ?></th>
                     </tr>
                 </tbody>
             </table>
 
-            <a href="formPesan.php" class="fw-normal btn btn-dash float-end">Batalkan Pesanan</a>
-            <a href="formPesan.php" class="fw-normal btn btn-dash float-end me-2">Edit Pesanan</a>
+            <a href="delete.php?id=<?= $data['PesanID'] ?>" class="fw-normal btn btn-dash float-end">Batalkan Pesanan</a>
+            <a href="edit.php?id=<?= $data['PesanID'] ?>" class="fw-normal btn btn-dash float-end me-2">Edit Pesanan</a>
 
             <a href="formPesan.php" class="btn btn-primary mt-3">Pesan Lagi</a>
         </div>

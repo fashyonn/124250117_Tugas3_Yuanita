@@ -426,3 +426,31 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+.form-select {
+    width: 100%;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0;
+    color: var(--primary-color) !important;
+    padding: 8px 0;
+}
+
+.form-select:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.edit.form-control {
+    width: 100%;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0;
+    color: var(--primary-color) !important;
+    padding: 8px 0;
+}
+
+.edit.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}

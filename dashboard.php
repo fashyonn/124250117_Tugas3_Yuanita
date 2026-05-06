@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 $user = $_SESSION['username'];
 
 $id = mysqli_query($koneksi, "SELECT * FROM pemesan");
+
 if($id){
     $last_id = mysqli_insert_id($koneksi);
 }
