@@ -40,6 +40,22 @@ $query = mysqli_query($koneksi, "SELECT * FROM daftarfilm");
                     <i class="d-inline-block align-text-top bi bi-person-circle"></i>
                     <?= $user ?>
                 </a>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li>
+                        <a class="dropdown-item" href="invoice.php">
+                            <i class="bi bi-ticket-perforated me-2"></i>Tiket yang Dipesan
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="logout.php">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                        </a>
+                    </li>
+                </ul>
             </div>
         </nav>
         <div class="header">
@@ -56,24 +72,25 @@ $query = mysqli_query($koneksi, "SELECT * FROM daftarfilm");
             <div class="container">
                 <div class="row">
 
-                    <?php while($data = mysqli_fetch_array($query)) ?>
-                    <div class="col-md-6 mb-4">
-                        <div class="box row g-0 border border-secondary rounded overflow-hidden">
-                            <div class="col-5">
-                                <img src="image/<?= $data["img"] ?>" alt="">
-                            </div>
-                            <div class="col-7">
-                                <div class="movie-info">
-                                    <h2><?= $data["judul"] ?></h2>
-                                    <div class="genre"><?= $data["genre"] ?></div>
-                                    <div class="duration"><?= $data["durasi"] ?></div>
-                                    <div class="schedule"><?= $data["jadwal"] ?></div>
-                                    <p class="synopsis"><?= $data["sinopsis"] ?></p>
-                                    <div class="price"><?= $data["harga"] ?></div>
+                    <?php while ($data = mysqli_fetch_array($query)) { ?>
+                        <div class="col-md-6 mb-4">
+                            <div class="box row g-0 border border-secondary rounded overflow-hidden h-100">
+                                <div class="col-5">
+                                    <img src="image/<?= $data["img"] ?>" alt="">
+                                </div>
+                                <div class="col-7">
+                                    <div class="movie-info">
+                                        <h2><?= $data["judul"] ?></h2>
+                                        <div class="genre"><?= $data["genre"] ?></div>
+                                        <div class="duration">± <?= $data["durasi"] ?></div>
+                                        <div class="schedule">Tayang Pukul <?= $data["jadwal"] ?> WIB</div>
+                                        <p class="synopsis"><?= $data["sinopsis"] ?></p>
+                                        <div class="price">Rp<?= number_format($data["harga"], 0, ',', '.'); ?></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
 
                     <a href="formPesan.php"><button class="btn-dash">Pesan Sekarang</button></a>
 

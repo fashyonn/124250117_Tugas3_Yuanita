@@ -1,6 +1,24 @@
 <?php
 session_start();
-$pesanan = $_SESSION['data'];
+require 'koneksi.php';
+
+$userid = $_SESSION['UserID'];
+$user = $_SESSION['username'];
+$id_pesanan = $_GET['id'];
+
+$sql = "SELECT p.*, d.judul, d.harga 
+        FROM pemesan p
+        JOIN daftarfilm d ON p.FilmID = d.FilmID 
+        WHERE p.PesanID = '$id_pesanan' AND p.UserID = '$userid'";
+
+$query = mysqli_query($koneksi, $sql);
+$data = mysqli_fetch_assoc($query);
+
+if (!$data) {
+    die("Tiket tidak ditemukan atau kamu tidak berhak melihat tiket ini!");
+}
+
+$total = $data['harga'] * $data['jumlah'];
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +46,7 @@ $pesanan = $_SESSION['data'];
             <a class="navbar-brand text-white fw-semibold" href="dashboard.php">Movie</a>
             <a class="navbar-brand float-end text-white fw-semibold" href="#">
                 <i class="d-inline-block align-text-top bi bi-person-circle"></i>
-                Yuanita
+                <?= $user ?>
             </a>
         </div>
     </nav>
@@ -40,19 +58,13 @@ $pesanan = $_SESSION['data'];
         <div class="card-body" style="background-color: #3A2A2A;">
             <table class="table">
                 <tbody>
-                    <?php foreach ($pesanan as $label => $isi): ?>
-                        <?php
-                        if ($label == 'Total Bayar')
-                            continue;
-                        ?>
-                        <tr>
-                            <td><?php echo ($label); ?></td>
-                            <td><?php echo $isi; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
+                    <tr>
+                        <td>Nama</td>
+                        <td><?= $data['nama'] ?></td>
+                    </tr>
                     <tr class="table-danger">
                         <th>Total Bayar</th>
-                        <th><?php echo "Rp" . number_format($pesanan['Total Bayar'], 0, ',', '.'); ?></th>
+                        <th>Rp<?= number_format($total, 0, ',', '.'); ?></th>
                     </tr>
                 </tbody>
             </table>

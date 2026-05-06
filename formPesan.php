@@ -1,3 +1,17 @@
+<?php
+session_start();
+require 'koneksi.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user = $_SESSION['username'];
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +37,7 @@
             <a class="navbar-brand text-white fw-semibold" href="dashboard.php">Movie</a>
             <a class="navbar-brand float-end text-white fw-semibold" href="#">
                 <i class="d-inline-block align-text-top bi bi-person-circle"></i>
-                Yuanita
+                <?= $user ?>
             </a>
         </div>
     </nav>
@@ -51,19 +65,19 @@
                     <div class="radio-box">
                         <p>Film yang ingin di pesan : </p>
                         <label class="radio-opsi">
-                            <input type="radio" name="film" value="Goat" required>Goat
+                            <input type="radio" name="film" value="1" required>Goat
                         </label>
                         <label class="radio-opsi">
-                            <input type="radio" name="film" value="Sore" required>Sore
+                            <input type="radio" name="film" value="2" required>Sore
                         </label>
                         <label class="radio-opsi">
-                            <input type="radio" name="film" value="Five Night at Freddy's 2" required>Five Night at Freddy's 2
+                            <input type="radio" name="film" value="3" required>Five Night at Freddy's 2
                         </label>
                         <label class="radio-opsi">
-                            <input type="radio" name="film" value="Jumbo" required>Jumbo
+                            <input type="radio" name="film" value="4" required>Jumbo
                         </label>
                         <label class="radio-opsi">
-                            <input type="radio" name="film" value="Rangga & Cinta" required>Rangga & Cinta
+                            <input type="radio" name="film" value="5" required>Rangga & Cinta
                         </label>
                     </div>
                 </div>

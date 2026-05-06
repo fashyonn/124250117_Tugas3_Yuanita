@@ -1,46 +1,36 @@
 <?php
-$hargaTiket = $_POST['film'];
-switch ($hargaTiket) {
-    case "Goat":
-        $hargaTiket = "Rp80.000";
-        $harga = 80000;
-        break;
+session_start();
+require 'koneksi.php';
 
-    case "Sore":
-        $hargaTiket = "Rp65.000";
-        $harga = 65000;
-        break;
-
-    case "Five Night at Freddy's 2":
-        $hargaTiket = "Rp70.000";
-        $harga = 70000;
-        break;
-
-    case "Jumbo":
-        $hargaTiket = "Rp60.000";
-        $harga = 60000;
-        break;
-
-    case "Rangga & Cinta":
-        $hargaTiket = "Rp70.000";
-        $harga = 70000;
-        break;
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
 }
 
-session_start();
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $totalBayar = $harga * $_POST['tiket'];
+$userid  = $_SESSION['user_id'];
+$user    = $_POST['namaPelanggan'];
+$email   = $_POST['emailPelanggan'];
+$film    = $_POST['film'];
+$jumlah  = $_POST['tiket'];
+$kursi   = $_POST['kursi'];
+$payment = $_POST['mp'];
 
-    $_SESSION['data'] = [
-        'Nama' => $_POST['namaPelanggan'],
-        'Email' => $_POST['emailPelanggan'],
-        'Film' => $_POST['film'],
-        'Jumlah Tiket' => $_POST['tiket'],
-        'Kursi' => $_POST['kursi'],
-        'Metode Pembayaran' => $_POST['mp'],
-        'Harga per tiket' => $hargaTiket,
-        'Total Bayar' => $totalBayar
-    ];
+
+$add = "INSERT INTO pemesan (nama, UserID, email, FilmID, jumlah, kursi, pembayaran) 
+        VALUES ('$user', '$userid', '$email', '$film', '$jumlah', '$kursi', '$payment')";
+
+$query = mysqli_query($koneksi, $add);
+
+if ($query) {
+    $last_id = mysqli_insert_id($koneksi);
+    unset($_SESSION['namaPelanggan']);
+    unset($_SESSION['emailPelanggan']);
+    unset($_SESSION['film']);
+    unset($_SESSION['tiket']);
+    unset($_SESSION['kursi']);
+    unset($_SESSION['mp']);
+} else {
+    header("Location: formPesan.php");
 }
 ?>
 
@@ -69,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card-body">
             <h5 class="card-title text-center">Pemesanan Tiket Berhasil</h5>
             <p class="card-text">Tiket selanjutnya akan dikirim melalui email. Cek email secara berkala!</p>
-            <a href="invoice.php" class="btn btn-primary mt-0">Detail Pemesanan</a>
+            <a href="invoice.php?id=<?= $last_id ?>" class="btn btn-primary mt-0">Detail Pemesanan</a>
         </div>
     </div>
 </body>
